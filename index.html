@@ -98,8 +98,6 @@
     color: var(--muted);
     font-size: 1.1875rem;
   }
-
-  /* ---------- Link tiles ---------- */
   .links {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -157,7 +155,6 @@
     overflow-wrap: anywhere;
   }
 
-  /* Twitch is the main link: full width, horizontal */
   .tile.twitch {
     --c: var(--twitch);
     --tile-ink: #ffffff;
@@ -185,7 +182,6 @@
     font-size: 0.9375rem;
   }
 
-  /* ---------- Small screens ---------- */
   @media (max-width: 720px) {
     .links { grid-template-columns: 1fr; gap: 18px; }
     .tile { min-height: 0; gap: 28px; box-shadow: 6px 6px 0 var(--line); }
