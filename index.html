@@ -72,7 +72,6 @@
     padding: clamp(40px, 9vw, 96px) 24px 48px;
   }
 
-  /* ---------- Hero ---------- */
   .hero { margin-bottom: clamp(36px, 7vw, 64px); }
 
   h1 {
@@ -112,8 +111,6 @@
     color: var(--muted);
     font-size: 1.1875rem;
   }
-
-  /* ---------- Link tiles ---------- */
   .links {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -170,8 +167,6 @@
     font-size: 0.975rem;
     overflow-wrap: anywhere;
   }
-
-  /* Twitch is the main link: full width, horizontal */
   .tile.twitch {
     --c: var(--twitch);
     --tile-ink: #ffffff;
@@ -198,8 +193,6 @@
     color: var(--muted);
     font-size: 0.9375rem;
   }
-
-  /* ---------- Small screens ---------- */
   @media (max-width: 720px) {
     .links { grid-template-columns: 1fr; gap: 18px; }
     .tile { min-height: 0; gap: 28px; box-shadow: 6px 6px 0 var(--line); }
@@ -211,8 +204,6 @@
     .tile.twitch .go svg { width: 28px; height: 28px; }
   }
 
-
-  /* ---------- Fun motion ---------- */
   .tile { animation: pop 0.7s cubic-bezier(0.3, 1.6, 0.5, 1) backwards; animation-delay: calc(0.75s + var(--n, 0) * 120ms); }
   @keyframes pop {
     from { transform: scale(0.6) rotate(-5deg); opacity: 0; }
