@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>kutkat5</title>
-<meta name="description" content="Find kutkat5 on Twitch, YouTube, TikTok and Steam.">
+<title>Kutkat5 – Twitch, YouTube, TikTok & Steam</title>
+<meta name="description" content="Find Kutkat5 on Twitch, YouTube, TikTok and Steam.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Figtree:wght@500;700&display=swap" rel="stylesheet">
@@ -65,6 +65,8 @@
   }
 
   main {
+    position: relative;
+    z-index: 1;
     max-width: 960px;
     margin: 0 auto;
     padding: clamp(40px, 9vw, 96px) 24px 48px;
@@ -84,12 +86,24 @@
   }
   h1 .ch {
     display: inline-block;
-    animation: drop 0.7s cubic-bezier(0.3, 1.5, 0.5, 1) backwards;
-    animation-delay: calc(var(--i) * 70ms);
+    animation:
+      drop 0.7s cubic-bezier(0.3, 1.5, 0.5, 1) backwards,
+      wave 3.6s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 70ms), calc(1.5s + var(--i) * 140ms);
   }
+  h1 .hop { display: inline-block; cursor: default; }
+  h1 .hop.go { animation: hop 0.55s cubic-bezier(0.3, 1.6, 0.5, 1); }
   @keyframes drop {
     from { transform: translateY(-0.9em) rotate(-8deg); opacity: 0; }
     to   { transform: none; opacity: 1; }
+  }
+  @keyframes wave {
+    0%, 55%, 100% { transform: none; }
+    28% { transform: translateY(-0.06em) rotate(-3deg); }
+  }
+  @keyframes hop {
+    0%, 100% { transform: none; }
+    40% { transform: translateY(-0.22em) rotate(8deg) scale(1.08); }
   }
 
   .hero p {
@@ -98,6 +112,8 @@
     color: var(--muted);
     font-size: 1.1875rem;
   }
+
+  /* ---------- Link tiles ---------- */
   .links {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -155,6 +171,7 @@
     overflow-wrap: anywhere;
   }
 
+  /* Twitch is the main link: full width, horizontal */
   .tile.twitch {
     --c: var(--twitch);
     --tile-ink: #ffffff;
@@ -182,30 +199,79 @@
     font-size: 0.9375rem;
   }
 
+  /* ---------- Small screens ---------- */
   @media (max-width: 720px) {
     .links { grid-template-columns: 1fr; gap: 18px; }
     .tile { min-height: 0; gap: 28px; box-shadow: 6px 6px 0 var(--line); }
-    .tile.twitch { gap: 16px; padding: 22px; }
+    .tile.twitch { gap: 14px; padding: 20px; }
+    .tile.twitch .name { font-size: clamp(1.75rem, 8vw, 2.25rem); }
+    .tile.twitch .handle { font-size: 0.95rem; overflow-wrap: normal; }
     .tile.twitch .icon { width: 56px; height: 56px; }
     .tile.twitch .icon svg { width: 32px; height: 32px; }
-    .tile.twitch .go svg { width: 30px; height: 30px; }
+    .tile.twitch .go svg { width: 28px; height: 28px; }
+  }
+
+
+  /* ---------- Fun motion ---------- */
+  .tile { animation: pop 0.7s cubic-bezier(0.3, 1.6, 0.5, 1) backwards; animation-delay: calc(0.75s + var(--n, 0) * 120ms); }
+  @keyframes pop {
+    from { transform: scale(0.6) rotate(-5deg); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+
+  .icon { transition: transform 0.25s cubic-bezier(0.3, 1.6, 0.5, 1); }
+  .tile:hover .icon, .tile:focus-visible .icon { transform: rotate(-14deg) scale(1.14); }
+  .go svg { transition: transform 0.2s ease; }
+  .tile:hover .go svg, .tile:focus-visible .go svg { transform: translateX(6px); }
+
+  .tile.twitch .icon svg { animation: wiggle 5s ease-in-out 2.5s infinite; }
+  @keyframes wiggle {
+    0%, 12%, 100% { transform: none; }
+    3%  { transform: rotate(-12deg) scale(1.08); }
+    6%  { transform: rotate(10deg) scale(1.08); }
+    9%  { transform: rotate(-6deg); }
+  }
+
+  .floaters { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+  .floaters i {
+    position: absolute;
+    display: block;
+    border: 3px solid var(--line);
+    animation: float var(--d, 10s) ease-in-out var(--dl, 0s) infinite alternate;
+  }
+  @keyframes float {
+    from { transform: translateY(0) rotate(var(--r, 0deg)); }
+    to   { transform: translateY(-26px) rotate(calc(var(--r, 0deg) + 35deg)); }
+  }
+  .f1 { width: 46px; height: 46px; border-radius: 50%; background: var(--steam); top: 9%; right: 9%; --d: 9s; }
+  .f2 { width: 38px; height: 38px; border-radius: 10px; background: var(--youtube); top: 26%; right: 4%; --r: 12deg; --d: 11s; --dl: -3s; }
+  .f3 { width: 34px; height: 34px; border-radius: 50%; background: var(--tiktok); bottom: 12%; left: 4%; --d: 12s; --dl: -5s; }
+  .f4 { width: 42px; height: 42px; border-radius: 12px; background: var(--twitch); bottom: 26%; right: 5%; --r: -10deg; --d: 10s; --dl: -2s; }
+  .f5 { width: 26px; height: 26px; border-radius: 8px; background: var(--steam); top: 58%; left: 2.5%; --r: 20deg; --d: 8s; --dl: -6s; }
+
+  @media (max-width: 1150px) { .floaters .f4 { display: none; } }
+  @media (max-width: 720px) {
+    .f1 { width: 30px; height: 30px; top: 2.5%; right: 6%; }
+    .f2 { width: 26px; height: 26px; top: 2.5%; right: 22%; }
+    .floaters .f3, .floaters .f4, .floaters .f5 { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    h1 .ch { animation: none; }
-    .tile { transition: none; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .floaters { display: none; }
   }
 </style>
 </head>
 <body>
+<div class="floaters" aria-hidden="true"><i class="f1"></i><i class="f2"></i><i class="f3"></i><i class="f4"></i><i class="f5"></i></div>
 <main>
   <header class="hero">
-    <h1 aria-label="kutkat5"><span class="ch" style="--i:0" aria-hidden="true">k</span><span class="ch" style="--i:1" aria-hidden="true">u</span><span class="ch" style="--i:2" aria-hidden="true">t</span><span class="ch" style="--i:3" aria-hidden="true">k</span><span class="ch" style="--i:4" aria-hidden="true">a</span><span class="ch" style="--i:5" aria-hidden="true">t</span><span class="ch" style="--i:6" aria-hidden="true">5</span></h1>
+    <h1 aria-label="Kutkat5"><span class="ch" style="--i:0" aria-hidden="true"><span class="hop">K</span></span><span class="ch" style="--i:1" aria-hidden="true"><span class="hop">u</span></span><span class="ch" style="--i:2" aria-hidden="true"><span class="hop">t</span></span><span class="ch" style="--i:3" aria-hidden="true"><span class="hop">k</span></span><span class="ch" style="--i:4" aria-hidden="true"><span class="hop">a</span></span><span class="ch" style="--i:5" aria-hidden="true"><span class="hop">t</span></span><span class="ch" style="--i:6" aria-hidden="true"><span class="hop">5</span></span></h1>
   </header>
 
   <ul class="links">
     <li style="display:contents">
-      <a class="tile twitch" href="https://www.twitch.tv/kutkat5" target="_blank" rel="noopener noreferrer">
+      <a class="tile twitch" style="--n:0" href="https://www.twitch.tv/kutkat5" target="_blank" rel="noopener noreferrer">
         <span class="icon" aria-hidden="true" style="color:#9146ff"><svg viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0 1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg></span>
           <span class="text">
           <span class="name">Watch on Twitch</span>
@@ -216,7 +282,7 @@
     </li>
 
     <li style="display:contents">
-      <a class="tile youtube" href="https://www.youtube.com/@seth.3r" target="_blank" rel="noopener noreferrer">
+      <a class="tile youtube" style="--n:1" href="https://www.youtube.com/@seth.3r" target="_blank" rel="noopener noreferrer">
         <span class="top">
           <span class="icon" aria-hidden="true" style="color:#ff0000"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></span>
           <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -229,7 +295,7 @@
     </li>
 
     <li style="display:contents">
-      <a class="tile tiktok" href="https://www.tiktok.com/@zoinkploink" target="_blank" rel="noopener noreferrer">
+      <a class="tile tiktok" style="--n:2" href="https://www.tiktok.com/@zoinkploink" target="_blank" rel="noopener noreferrer">
         <span class="top">
           <span class="icon" aria-hidden="true" style="color:#000000"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg></span>
           <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -242,7 +308,7 @@
     </li>
 
     <li style="display:contents">
-      <a class="tile steam" href="https://steamcommunity.com/id/whatthesussy" target="_blank" rel="noopener noreferrer">
+      <a class="tile steam" style="--n:3" href="https://steamcommunity.com/id/whatthesussy" target="_blank" rel="noopener noreferrer">
         <span class="top">
           <span class="icon" aria-hidden="true" style="color:#171a21"><svg viewBox="0 0 24 24"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658a3.387 3.387 0 011.912-.59c.063 0 .125.004.188.006l2.861-4.142V8.91a4.528 4.528 0 014.524-4.524c2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159a3.392 3.392 0 01-3.39 3.396 3.412 3.412 0 01-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25a2.551 2.551 0 003.337-3.324 2.547 2.547 0 00-3.255-1.413l1.523.63a1.878 1.878 0 01-1.445 3.467H7.54zm11.415-9.303a3.019 3.019 0 00-3.015-3.015 3.015 3.015 0 103.015 3.015zm-5.273-.005a2.264 2.264 0 114.531 0 2.267 2.267 0 01-2.266 2.265 2.264 2.264 0 01-2.265-2.265z"/></svg></span>
           <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -256,5 +322,14 @@
   </ul>
 
 </main>
+<script>
+  document.querySelectorAll('h1 .ch').forEach(function (ch) {
+    var hop = ch.firstElementChild;
+    function go() { hop.classList.remove('go'); void hop.offsetWidth; hop.classList.add('go'); }
+    ch.addEventListener('pointerenter', go);
+    ch.addEventListener('click', go);
+    hop.addEventListener('animationend', function () { hop.classList.remove('go'); });
+  });
+</script>
 </body>
 </html>
