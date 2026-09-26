@@ -317,6 +317,8 @@
 
     .links { grid-template-columns: 1fr; gap: 20px; }
     .tile:not(.twitch) { grid-column: auto; }
+    .support { margin-top: 26px; width: 100%; }
+    .support-btn, .support-link { width: 100%; justify-content: center; }
 
     /* every link becomes a compact row */
     .tile {
@@ -348,6 +350,62 @@
     .tile.twitch .handle { font-size: 0.95rem; overflow-wrap: normal; }
     .tile.twitch .mark { width: 150px; height: 150px; right: 10px; bottom: -44px; }
   }
+
+
+  /* ---------- Support button ---------- */
+  .support { margin-top: 32px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+
+  .support-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 0.975rem;
+    color: var(--ink);
+    background: transparent;
+    border: 3px solid var(--line);
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 var(--line);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
+  }
+  .support-btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--line); background: var(--youtube); color: #fff; }
+  .support-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--line); }
+  .support-btn:focus-visible { outline: 4px solid var(--ink); outline-offset: 3px; }
+  .support-btn .heart { display: inline-flex; width: 18px; height: 18px; }
+  .support-btn .heart svg {
+    width: 100%; height: 100%; fill: var(--youtube); stroke: var(--line); stroke-width: 1.5;
+    transition: transform 0.2s ease;
+  }
+  .support-btn:hover .heart svg { fill: #fff; animation: beat 0.6s ease-in-out infinite; }
+  @keyframes beat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+  }
+
+  .support-link {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    font-weight: 700;
+    font-size: 0.975rem;
+    color: var(--tile-ink, #1a1033);
+    text-decoration: none;
+    background: var(--youtube);
+    border: 3px solid var(--line);
+    border-radius: 999px;
+    box-shadow: 4px 4px 0 var(--line);
+  }
+  .support-link.show {
+    display: inline-flex;
+    animation: pop 0.4s cubic-bezier(0.3, 1.6, 0.5, 1) backwards;
+  }
+  .support-link svg { width: 18px; height: 18px; fill: #fff; flex: none; }
+  .support-link:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--line); }
+  .support-link:focus-visible { outline: 4px solid var(--ink); outline-offset: 3px; }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -412,9 +470,40 @@
       </a>
     </li>
   </ul>
+
+  <div class="support">
+    <button type="button" class="support-btn" id="supportBtn" aria-expanded="false" aria-controls="supportLink">
+      <span class="heart" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>
+      </span>
+      Support Kutkat's stuff
+    </button>
+    <a id="supportLink" class="support-link" href="https://ko-fi.com/kelefotrak" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>
+      ko-fi.com/kelefotrak
+    </a>
+  </div>
 </main>
 
 <script>
+  (function () {
+    var btn = document.getElementById('supportBtn');
+    var link = document.getElementById('supportLink');
+    if (btn && link) {
+      btn.addEventListener('click', function () {
+        var showing = link.classList.contains('show');
+        if (showing) {
+          link.classList.remove('show');
+          btn.setAttribute('aria-expanded', 'false');
+        } else {
+          link.classList.add('show');
+          btn.setAttribute('aria-expanded', 'true');
+          link.focus();
+        }
+      });
+    }
+  })();
+
   document.querySelectorAll('h1 .ch').forEach(function (ch) {
     var hop = ch.firstElementChild;
     function go() { hop.classList.remove('go'); void hop.offsetWidth; hop.classList.add('go'); }
